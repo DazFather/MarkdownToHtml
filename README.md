@@ -1,5 +1,5 @@
 # MarkdownToHtml
-A Function that allow you to transform a Markdown text into HTML
+A [Go](https://golang.org) function that allow you to transform a Markdown text into HTML
 > Tiny utility that I needed to create myself because I coudn't find another ready to use library.
 
 
