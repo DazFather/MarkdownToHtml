@@ -3,10 +3,9 @@ package main
 import (
 	"html"
 	"regexp"
-	"strings"
 )
 
-func translate(text string) (parsed string) {
+func Translate(text string) (parsed string) {
 	var (
 		tag     string
 		cursor  int
@@ -14,10 +13,8 @@ func translate(text string) (parsed string) {
 		tagName = map[string]string{
 			"_":  "i",
 			"*":  "b",
-			"#":  "h1",
 			"__": "em",
 			"**": "strong",
-			"##": "h2",
 		}
 		rgxToken = regexp.MustCompile(`[_*#]+`)
 		rgxEndln = regexp.MustCompile(`\r?\n`)
@@ -25,31 +22,34 @@ func translate(text string) (parsed string) {
 
 	vals := rgxToken.FindAllStringIndex(text, -1)
 	for _, ind := range vals {
+		if cursor > ind[0] {
+			continue
+		}
 		min, max := ind[0], ind[1]
 		token := text[min:max]
 
-		if wait[token] {
+		switch true {
+		case wait[token]:
 			tag = "</" + tagName[token] + ">"
 			delete(wait, token)
-		} else {
+
+		case token[0] == '#':
+			tag = fmt.Sprint("<h", len(token), ">")
+			if val := rgxEndln.FindStringIndex(text[max:]); val != nil {
+				parsed += html.EscapeString(text[cursor:min]) + tag
+				parsed += parse(text[max:max + val[0]]) + "</" + tag[1:] + "\n"
+				max = max + val[1]
+				cursor, min = max, max
+				continue
+			}
+
+		default:
 			tag = "<" + tagName[token] + ">"
 			wait[token] = true
 		}
 
 		parsed += html.EscapeString(text[cursor:min]) + tag
 		cursor = max
-		if token[0] == '#' {
-			line := ""
-			if val := rgxEndln.FindStringIndex(text[cursor:]); val != nil {
-				line = text[cursor:val[1] + cursor]
-				cursor += val[1]
-			} else {
-				line = text[cursor:]
-				cursor += len(line)
-			}
-			parsed += parse(strings.TrimSpace(line)) + "</" + tag[1:] + "\n"
-			delete(wait, token)
-		}
 	}
 	parsed += html.EscapeString(text[cursor:])
 
