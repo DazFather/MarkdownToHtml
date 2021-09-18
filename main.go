@@ -3,7 +3,10 @@ package main
 import (
 	"html"
 	"regexp"
+	"fmt"
+	"strings"
 )
+
 
 func Translate(text string) (parsed string) {
 	var (
@@ -16,7 +19,7 @@ func Translate(text string) (parsed string) {
 			"__": "em",
 			"**": "strong",
 		}
-		rgxToken = regexp.MustCompile(`[_*#]+`)
+		rgxToken = regexp.MustCompile(`[_*]{1,2}|#{1,7}|\[.+\]\([\w\./:%&\?!=-]+\)`)
 		rgxEndln = regexp.MustCompile(`\r?\n`)
 	)
 
@@ -37,12 +40,15 @@ func Translate(text string) (parsed string) {
 			tag = fmt.Sprint("<h", len(token), ">")
 			if val := rgxEndln.FindStringIndex(text[max:]); val != nil {
 				parsed += html.EscapeString(text[cursor:min]) + tag
-				parsed += parse(text[max:max + val[0]]) + "</" + tag[1:] + "\n"
+				parsed += Translate(text[max:max+val[0]]) + "</" + tag[1:] + "\n"
 				max = max + val[1]
 				cursor, min = max, max
 				continue
 			}
-
+		case token[0] == '[':
+			link := strings.Split(token[1:len(token)-1], "](")
+			fmt.Println(link)
+			tag = fmt.Sprint("<a href=\"", link[1], "\">", Translate(link[0]), "</a>")
 		default:
 			tag = "<" + tagName[token] + ">"
 			wait[token] = true
