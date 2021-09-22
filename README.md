@@ -10,7 +10,7 @@ A [Go](https://golang.org) function that allow you to transform a Markdown text 
 | __                | &lt;em&gt;                              |
 | *                 | &lt;b&gt;                               |
 | _                 | &lt;i&gt;                               |
-| #...              | &lt;h1...&gt;                           |
+| #...              | &lt;h...&gt;                            |
 | \[anything](link) | &lt;a href="link"&gt;anything&lt;/a&gt; |
 | \[text](link)     | &lt;img str="link" alt="text"&gt;       |
 
