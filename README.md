@@ -4,15 +4,15 @@ A [Go](https://golang.org) function that allow you to transform a Markdown text 
 
 
 ## Supported tags:
-| Markdown          | HTML                                   |
-| ----------------- | -------------------------------------- |
-| **                | &lt;strong&gt;                         |
-| __                | &lt;em&gt;                             |
-| *                 | &lt;b&gt;                              |
-| _                 | &lt;i&gt;                              |
-| #                 | &lt;h1&gt;                             |
-| \[anything](link) | &lt;a href="link"&gt;anything&lt;a&gt; |
-| \[text](link)     | &lt;img str="link" alt="text"&gt;      |
+| Markdown          | HTML                                    |
+| ----------------- | --------------------------------------- |
+| **                | &lt;strong&gt;                          |
+| __                | &lt;em&gt;                              |
+| *                 | &lt;b&gt;                               |
+| _                 | &lt;i&gt;                               |
+| #...              | &lt;h1...&gt;                           |
+| \[anything](link) | &lt;a href="link"&gt;anything&lt;/a&gt; |
+| \[text](link)     | &lt;img str="link" alt="text"&gt;       |
 
 > <h_> tags are supported from 1 to 7 but you must to go to the next line to close the tag
 
