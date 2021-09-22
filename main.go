@@ -47,8 +47,12 @@ func Translate(text string) (parsed string) {
 			}
 		case token[0] == '[':
 			link := strings.Split(token[1:len(token)-1], "](")
-			fmt.Println(link)
-			tag = fmt.Sprint("<a href=\"", link[1], "\">", Translate(link[0]), "</a>")
+			if match, _ := regexp.MatchString(`(?i).*\.(jpe?g|png|webp)$`, link[1]); match {
+				tag = fmt.Sprint("<img src=\"", link[1], "\" alt=\"", html.EscapeString(link[0]), "\">")
+			} else {
+				tag = fmt.Sprint("<a href=\"", link[1], "\">", Translate(link[0]), "</a>")
+			}
+			
 		default:
 			tag = "<" + tagName[token] + ">"
 			wait[token] = true
