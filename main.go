@@ -19,7 +19,7 @@ func Translate(text string) (parsed string) {
 			"__": "em",
 			"**": "strong",
 		}
-		rgxToken = regexp.MustCompile(`[_*]{1,2}|#{1,7}|\[.+\]\([\w\./:%&\?!=-]+\)`)
+		rgxToken = regexp.MustCompile(`\n ?-{3} ?[\n$]|[_*]{1,2}|#{1,7}|\[.+\]\([\w\./:%&\?!=-]+\)`)
 		rgxEndln = regexp.MustCompile(`\r?\n`)
 	)
 
@@ -32,6 +32,7 @@ func Translate(text string) (parsed string) {
 		token := text[min:max]
 
 		switch true {
+
 		case wait[token]:
 			tag = "</" + tagName[token] + ">"
 			delete(wait, token)
@@ -45,6 +46,7 @@ func Translate(text string) (parsed string) {
 				cursor, min = max, max
 				continue
 			}
+
 		case token[0] == '[':
 			link := strings.Split(token[1:len(token)-1], "](")
 			if match, _ := regexp.MatchString(`(?i).*\.(apng|avif|gif|jpe?g|jpe|jf?if|png|svg|webp)$`, link[1]); match {
@@ -52,7 +54,10 @@ func Translate(text string) (parsed string) {
 			} else {
 				tag = fmt.Sprint("<a href=\"", link[1], "\">", Translate(link[0]), "</a>")
 			}
-			
+
+		case strings.Contains(token, "---"):
+			tag = "\n<hr>\n"
+
 		default:
 			tag = "<" + tagName[token] + ">"
 			wait[token] = true
