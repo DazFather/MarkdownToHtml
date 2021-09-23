@@ -12,7 +12,7 @@ A [Go](https://golang.org) function that allow you to transform a Markdown text 
 | _                  | &lt;i&gt;                              |
 | #...               | &lt;h_&gt;                             |
 | \[anything\](link) | &lt;a href="link"&gt;anything&lt;a&gt; |
-| \[text\](link)     | &lt;img str="link" alt="text"&gt;      |
+| \[text\](link)     | &lt;img src="link" alt="text"&gt;      |
 | \-\-\-             | &lt;hr&gt;                             |
 
 > <h_> tags are supported from 1 to 7 but you must to go to the next line to close the tag
